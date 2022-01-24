@@ -1,3 +1,8 @@
+# 테스트 환경에서 테스트 먼저
+docker exec python__2__test bash -c "cd /data/site_projects/python__2__test/src/ ; git pull origin master"
+
+docker exec python__2__test bash -c "cd /data/site_projects/python__2__test/src/ ; python manage.py test --settings=base.settings.prod"
+
 # 기존장고 종료
 docker exec python__2 pkill "gunicorn"
 
