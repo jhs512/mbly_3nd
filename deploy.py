@@ -22,7 +22,7 @@ def make_globals():
     else:
         project_dir = f"/docker_projects/nginx__1{project_dir_core}/src"
 
-    docker_work_dir = "/usr/src/app"
+    docker_work_dir = f"/data/site_projects/{name}"
 
 
 def deploy():
@@ -43,7 +43,7 @@ def deploy():
     # 도커컨테이너 안의 프로젝트 폴더입니다.
     volume_link = f"{project_dir}:{docker_work_dir}"
 
-    image_name = "python1"
+    image_name = name
 
     deploy_con_name = name
     test_con_name = f"{name}__test"
