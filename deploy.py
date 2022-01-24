@@ -83,7 +83,7 @@ def deploy():
 
     print("3.테스트용 이미지 생성")
     os.system("docker pull python:3.10")
-    result = get_logs(f"docker build --force-rm -t {cur_image_name} .")
+    result = get_logs(f"docker build --no-cache --force-rm -t {cur_image_name} .")
     fail_checker(result, test_con_name, cur_image_name, deploylogfile, "이미지 빌드 실패 requirements 혹은 test를 확인해주세요")
 
     print("4.make_Test_Con_And_Test")
