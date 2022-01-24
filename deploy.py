@@ -338,7 +338,7 @@ def env_getter():
     path = Path(__file__).resolve().parent
     print(path)
     f = open(f"{project_dir_core}/.env", "r", encoding="UTF-8")
-    target = open(f"{project_dir}/.env", "w", encoding="UTF-8")
+    target = open(f"{project_dir_core}/src/.env", "w", encoding="UTF-8")
     target.write(f.read())
     target.close()
     f.close()
