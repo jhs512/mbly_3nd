@@ -24,7 +24,7 @@ def deploy():
     else:
         python = "python3"
         # 젠킨스 빌드가 위치하게 될 곳으로 수정해주세요
-        project_dir = f"/docker_projects/nginx__1/data/site_projects/{project_name}"
+        project_dir = f"/docker_projects/nginx__1/data/site_projects/{project_name}/src"
 
     # 꼭 본인의 경로에 맞게 수정해주세요!#
     requirements_path = "requirements/prod.txt"
