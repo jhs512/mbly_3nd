@@ -6,12 +6,15 @@ import socket
 from datetime import datetime
 from pathlib import Path
 
+name = "python__2"
+test_port = "8001"
+deploy_port = "8000"
+
 
 def make_globals():
-    global project_dir, docker_work_dir, project_dir_core
+    global name, project_dir, docker_work_dir, project_dir_core
 
-    project_name = os.environ.get("JOB_NAME") or "python__2"
-    project_dir_core = f"/data/site_projects/{project_name}"
+    project_dir_core = f"/data/site_projects/{name}"
 
     # 윈도우에서 테스트용 설정입니다.
     if get_sys() == "Win":
@@ -23,7 +26,7 @@ def make_globals():
 
 
 def deploy():
-    global project_dir, docker_work_dir, project_dir_core
+    global project_dir, docker_work_dir, project_dir_core, name, test_port, deploy_port
     build_id = os.environ.get('BUILD_NUMBER') or get_now()
     path = get_setting_path()
     # 초기 실행 변수
@@ -42,12 +45,10 @@ def deploy():
 
     image_name = "python1"
 
-    deploy_con_name = "python__2"
-    test_con_name = "python__2__test"
+    deploy_con_name = name
+    test_con_name = f"{name}__test"
     database_con_name = "mariadb__1"
 
-    test_port = "8001"
-    deploy_port = "8000"
     #
     execute_file = "manage.py"
     deploy_setting_file = f"{path}.settings.prod"
