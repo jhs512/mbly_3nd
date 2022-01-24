@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def deploy():
-    global project_dir, docker_work_dir
+    global project_dir, docker_work_dir, project_dir_core
     build_id = os.environ.get('BUILD_NUMBER') or get_now()
     path = get_setting_path()
     # 초기 실행 변수
@@ -16,6 +16,7 @@ def deploy():
 
     # 젠킨스의 빌드이름을 환경변수로 걊을 받습니다, 없으면 python__2입니다.
     project_name = os.environ.get("JOB_NAME") or "python__2"
+    project_dir_core = f"/data/site_projects/{project_name}"
 
     # 윈도우에서 테스트용 설정입니다.
     if get_sys() == "Win":
@@ -24,7 +25,7 @@ def deploy():
     else:
         python = "python3"
         # 젠킨스 빌드가 위치하게 될 곳으로 수정해주세요
-        project_dir = f"/docker_projects/nginx__1/data/site_projects/{project_name}/src"
+        project_dir = f"/docker_projects/nginx__1{project_dir_core}/src"
 
     # 꼭 본인의 경로에 맞게 수정해주세요!#
     requirements_path = "requirements/prod.txt"
@@ -336,8 +337,8 @@ def make_deploy_logs(deploylogfile):
 def env_getter():
     path = Path(__file__).resolve().parent
     print(path)
-    f = open(f"{str(path.parent)}/.env", "r", encoding="UTF-8")
-    target = open(f"{str(path)}/.env", "w", encoding="UTF-8")
+    f = open(f"{project_dir_core}/.env", "r", encoding="UTF-8")
+    target = open(f"{project_dir}/.env", "w", encoding="UTF-8")
     target.write(f.read())
     target.close()
     f.close()
