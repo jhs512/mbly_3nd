@@ -342,6 +342,7 @@ def make_deploy_logs(deploylogfile):
 
 def env_getter():
     global project_dir_core
+    print(Path(__file__).resolve().parent)
     f = open(f"{project_dir_core}/.env", "r", encoding="UTF-8")
     target = open(f"{Path(__file__).resolve().parent}/.env", "w", encoding="UTF-8")
     target.write(f.read())
