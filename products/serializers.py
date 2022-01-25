@@ -7,12 +7,14 @@ from markets.serializers import MarketSerializer
 from products.models import Product, ProductReal, ProductCategoryItem
 
 
+# TODO 3주차 설명, 상품 카테고리 시리얼라이저, 읽기전용
 class ProductCategoryItemSerializer(ModelSerializer):
     class Meta:
         model = ProductCategoryItem
         fields = ['id', 'name']
 
 
+# TODO 3주차 설명, 상품 옵션 시리얼라이저, 읽기전용, AdminApiProductRealListCreateView 에서 쓰기로도 쓰인다.
 class ProductRealSerializer(ModelSerializer):
     pagination_class = LargeResultsSetPagination
 
@@ -22,6 +24,7 @@ class ProductRealSerializer(ModelSerializer):
                   'option_1_name', 'option_2_display_name', 'option_2_name', 'add_price', 'stock_quantity', 'rgb_color']
 
 
+# TODO 3주차 설명, 상품 옵션 시리얼라이저, 쓰기전용
 class ProductRealCreateSerializer(ModelSerializer):
     pagination_class = LargeResultsSetPagination
 
@@ -30,6 +33,8 @@ class ProductRealCreateSerializer(ModelSerializer):
     def validate(self, data):
         product = data.get('product', None)
 
+        # 상품정보를 입력받을 때는 상품ID가 없는게 맞고
+        # 상품정보를 저장할 때는 상품ID가 있다.
         if product and ProductReal.objects.filter(product=data['product'], option_1_name=data['option_1_name'],
                                                   option_2_name=data['option_2_name']).exists():
             raise serializers.ValidationError(
@@ -54,6 +59,7 @@ class ProductRealCreateSerializer(ModelSerializer):
         # ]
 
 
+# TODO 3주차 설명, 상품 PATCH 시리얼라이저, 쓰기전용
 class ProductPatchSerializer(ModelSerializer):
     class Meta:
         model = Product
@@ -62,6 +68,7 @@ class ProductPatchSerializer(ModelSerializer):
                   'review_point']
 
 
+# TODO 3주차 설명, 상품 POST 시리얼라이저, 쓰기전용
 class ProductCreateSerializer(ModelSerializer):
     product_reals = ProductRealCreateSerializer(many=True, required=False)
 
@@ -87,6 +94,7 @@ class ProductCreateSerializer(ModelSerializer):
         return product
 
 
+# TODO 3주차 설명, 상품 시리얼라이저, 읽기전용
 class ProductSerializer(ModelSerializer):
     market = MarketSerializer()
     cate_item = ProductCategoryItemSerializer()

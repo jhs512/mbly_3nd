@@ -9,14 +9,13 @@ from django.contrib.auth.views import (
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.urls import reverse
 from lazy_string import LazyString
-from rest_framework.exceptions import NotAuthenticated
-from rest_framework.generics import GenericAPIView, get_object_or_404 as drf_get_object_or_404
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -152,9 +151,10 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+# TODO 3주차 설명, 엑세스키와 리프레시키를 모두 재발급하는 로직이 필요합니다.
 class ApiRefreshRefreshTokenView(GenericAPIView):
-    permission_classes = ()
-    authentication_classes = ()
+    permission_classes = ()  # 중요, 이렇게 해야 접근이 가능합니다.
+    authentication_classes = ()  # 중요, 이렇게 해야 접근이 가능합니다.
 
     serializer_class = ApiRefreshRefreshTokenSerializer
 
@@ -169,14 +169,12 @@ class ApiRefreshRefreshTokenView(GenericAPIView):
         try:
             refresh_token: RefreshToken = RefreshToken(refresh)
         except TokenError as e:
-            raise AuthenticationFailed()
-        except Exception as e:
-            raise NotAuthenticated()
+            raise InvalidToken(e)
 
-        user: User = drf_get_object_or_404(User, id=refresh_token['user_id'])
-        new_refresh_token = MyTokenObtainPairSerializer.get_token(user)
+        user: User = get_object_or_404(User, id=refresh_token['user_id'])
+        new_refresh_token = MyTokenObtainPairSerializer.get_token(user)  # 이걸로 토큰을 생성해야 합니다. 다른 방법으로 하면 페이로드에 필수데이터가 누락된 버전이 생김
         new_access_token = new_refresh_token.access_token
-        refresh_token.blacklist()
+        refresh_token.blacklist()  # 꼭 블랙리스트에 넣어주세요.
 
         return Response({
             'refresh': str(new_refresh_token),

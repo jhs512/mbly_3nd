@@ -182,6 +182,7 @@ def product_unpick(request: HttpRequest, product_id):
 
 
 # 최종관리자용 뷰 시작
+# TODO 3주차 설명, Admin 용 상품 리스트와 생성 처리 뷰
 class AdminApiProductListCreateView(ListCreateAPIView):
     # admin만 사용가능 하도록
     permission_classes = [IsAdminUser]
@@ -200,6 +201,7 @@ class AdminApiProductListCreateView(ListCreateAPIView):
             return ProductCreateSerializer
 
 
+# TODO 3주차 설명, Admin 용 상품 단건조회, 수정(PATCH), 삭제 처리 뷰
 class AdminApiProductRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
 
@@ -219,6 +221,7 @@ class AdminApiProductRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
             return ProductPatchSerializer
 
 
+# TODO 3주차 설명, Admin 용 상품 단건조회, 수정(PATCH), 삭제 처리 뷰
 class AdminApiProductRealListCreateView(ListCreateAPIView):
     permission_classes = [IsAdminUser]
 

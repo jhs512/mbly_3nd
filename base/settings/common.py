@@ -77,7 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django_settings_export.settings_export',
+                'django_settings_export.settings_export',  # TODO 3주차 설명, django-settings-export 사용설정, 굉장히 좋습니다.
             ],
         },
     },
@@ -160,28 +160,32 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# TODO 3주차 설명, 이거 안하면 외부에서 이 서버의 API를 사용하지 못합니다.
 CORS_ALLOW_CREDENTIALS = True
 
 # 실제 운영서버 도메인
 # 장고 최신버전부터 이걸 안하면 안됨
 CSRF_TRUSTED_ORIGINS = ['https://sample1.public.473.be', 'https://site7.public.473.be', 'https://cdpn.io']
 
+# TODO 3주차 설명, 이거 안하면 외부에서 이 서버의 API를 사용하지 못합니다.
 CORS_ORIGIN_WHITELIST = CSRF_TRUSTED_ORIGINS
 
 # DRF
 
+# TODO 3주차 설명, 이본 인증 클래스에 꼭 SessionAuthentication 을 넣어주세요. 편합니다.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
+        'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication', # rest_framework_simplejwt.authentication.JWTAuthentication 사용하지 마세요.
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100
 }
 
+# TODO 3주차 설명, 엑세스키와 리프레시키의 수명 설정
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=60 * 10),
-    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60 * 60 * 24 * 30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=60 * 10),  # 이 부분과
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60 * 60 * 24 * 30),  # 이 부분만 고치면 됩니다.
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
