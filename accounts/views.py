@@ -9,12 +9,14 @@ from django.contrib.auth.views import (
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 from lazy_string import LazyString
-from rest_framework.generics import GenericAPIView
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.generics import GenericAPIView, get_object_or_404 as drf_get_object_or_404
 from rest_framework.response import Response
+from rest_framework_simplejwt.exceptions import TokenError, AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -163,13 +165,20 @@ class ApiRefreshRefreshTokenView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         refresh: str = serializer.validated_data['refresh']
-        refresh_token: RefreshToken = RefreshToken(refresh)
 
-        user: User = get_object_or_404(User, id=refresh_token['user_id'])
-        new_refresh_token = RefreshToken.for_user(user)
+        try:
+            refresh_token: RefreshToken = RefreshToken(refresh)
+        except TokenError as e:
+            raise AuthenticationFailed()
+        except Exception as e:
+            raise NotAuthenticated()
+
+        user: User = drf_get_object_or_404(User, id=refresh_token['user_id'])
+        new_refresh_token = MyTokenObtainPairSerializer.get_token(user)
+        new_access_token = new_refresh_token.access_token
         refresh_token.blacklist()
 
         return Response({
             'refresh': str(new_refresh_token),
-            'access': str(new_refresh_token.access_token),
+            'access': str(new_access_token),
         })
