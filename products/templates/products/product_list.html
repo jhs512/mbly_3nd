@@ -68,6 +68,10 @@
                         <span class="t-text-white t-border-2 t-border-white t-border-solid t-p-2 t-rounded t-whitespace-nowrap">VIEW MORE</span>
                     </div>
                 </a>
+                <a class="t-text-center t-mt-2"
+                   href="{% url 'products:detail' product.id %}">
+                    <span class="badge bg-primary">{{product.market.name}} {{product.market.review_point|floatformat:"1"}}</span>
+                </a>
                 <a class="t-text-center t-mt-2 t-no-underline t-text-black t-italic group-hover:t-underline"
                    href="{% url 'products:detail' product.id %}">
                     {{product.display_name}}

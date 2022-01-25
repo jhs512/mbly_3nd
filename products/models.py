@@ -44,7 +44,7 @@ class Product(models.Model):
 
     hit_count = models.PositiveIntegerField('조회수', default=0)
     review_count = models.PositiveIntegerField('리뷰수', default=0)
-    review_point = models.PositiveIntegerField('리뷰평점', default=0)
+    review_point = models.FloatField('리뷰평점', default=0)
 
     questions = GenericRelation(Question, related_query_name="question")
 

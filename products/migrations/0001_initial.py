@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('is_hidden', models.BooleanField(default=False, verbose_name='숨김여부')),
                 ('is_sold_out', models.BooleanField(default=False, verbose_name='품절여부')),
                 ('hit_count', models.PositiveIntegerField(default=0, verbose_name='조회수')),
-                ('review_count', models.PositiveIntegerField(default=0, verbose_name='리뷰수')),
+                ('review_count', models.FloatField(default=0, verbose_name='리뷰수')),
                 ('review_point', models.PositiveIntegerField(default=0, verbose_name='리뷰평점')),
             ],
         ),
