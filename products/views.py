@@ -15,7 +15,7 @@ from accounts.models import User
 from cart.forms import ProductCartAddForm
 from products.models import Product, ProductCategoryItem, ProductReal
 from products.serializers import ProductSerializer, ProductCreateSerializer, ProductRealSerializer, \
-    ProductPatchSerializer
+    ProductPatchSerializer, ProductRealCreateSerializer
 from qna.forms import QuestionForm
 from qna.models import Question
 
@@ -225,6 +225,10 @@ class AdminApiProductRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 class AdminApiProductRealListCreateView(ListCreateAPIView):
     permission_classes = [IsAdminUser]
 
+    def create(self, request, *args, **kwargs):
+        request.data.update({'product': kwargs['product_id']})
+        return super().create(request, *args, **kwargs)
+
     def get_queryset(self):
         product_id = self.kwargs['product_id']
 
@@ -232,4 +236,8 @@ class AdminApiProductRealListCreateView(ListCreateAPIView):
             .objects \
             .filter(product=product_id)
 
-    serializer_class = ProductRealSerializer
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return ProductRealSerializer
+        else:
+            return ProductRealCreateSerializer
