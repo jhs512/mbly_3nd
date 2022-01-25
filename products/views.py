@@ -44,6 +44,7 @@ def product_list(request: HttpRequest):
         .objects \
         .prefetch_related('cate_item') \
         .prefetch_related('product_reals') \
+        .prefetch_related('market') \
         .order_by('-id')
 
     if request.user.is_authenticated:
