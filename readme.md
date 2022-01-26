@@ -33,4 +33,4 @@
 - /c/xampp/mysql/bin/mysql -u sbsst -psbs123414 -e "DROP DATABASE IF EXISTS sample1_dev; CREATE DATABASE sample1_dev" && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000
   - DB 초기화 명령어 && 마이그레이트 && 서버실행
 
-# 내용추가
+# 내용추가!
